@@ -1,0 +1,22 @@
+name: Daily Check-in Reminders
+
+# Run every day at 9 AM UTC (11 AM Botswana time)
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Send check-in reminders
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            https://nxpaeiwodpyujuksbewx.supabase.co/functions/v1/send-checkin-reminders
+      
+      - name: Log completion
+        run: echo "✅ Check-in reminders sent at $(date)"
